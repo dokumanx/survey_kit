@@ -57,6 +57,8 @@ class SurveyController {
     BuildContext context,
     QuestionResult Function() resultFunction,
   ) {
+    _unfocus(context);
+
     if (onNextStep != null) {
       onNextStep!(context, resultFunction);
       return;
@@ -72,6 +74,8 @@ class SurveyController {
     required BuildContext context,
     QuestionResult Function()? resultFunction,
   }) {
+    _unfocus(context);
+
     if (onStepBack != null) {
       onStepBack!(context, resultFunction);
       return;
@@ -87,6 +91,8 @@ class SurveyController {
     required BuildContext context,
     QuestionResult Function()? resultFunction,
   }) {
+    _unfocus(context);
+
     if (onCloseSurvey != null) {
       onCloseSurvey!(context, resultFunction);
       return;
@@ -96,5 +102,12 @@ class SurveyController {
         resultFunction != null ? resultFunction.call() : null,
       ),
     );
+  }
+
+  void _unfocus(BuildContext context) {
+    FocusScopeNode currentFocus = FocusScope.of(context);
+    if (!currentFocus.hasPrimaryFocus && currentFocus.focusedChild != null) {
+      FocusManager.instance.primaryFocus?.unfocus();
+    }
   }
 }
